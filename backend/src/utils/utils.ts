@@ -10,7 +10,6 @@ export const deleteFile = (filePath: string) => {
 
 export const sendEmail = async (email: any, subject: any, text: any) => {
   try {
-    console.log(process.env.USER, process.env.PASS);
     const transporter = nodemailer.createTransport({
       // host: "gigger-api.orionmmtecheng.com",
       // port: 465,
@@ -51,7 +50,6 @@ export const sendEmail = async (email: any, subject: any, text: any) => {
 
 export const sendContactUsEmail = async (email: any, subject: string, text: any) => {
   try {
-    console.log(process.env.USER, process.env.PASS);
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
