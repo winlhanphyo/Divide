@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.MAX_COUNT = exports.paginationLimit = exports.imageURL = void 0;
-var imageURL = "http://localhost:4000/";
+var imageURL = "http://davide-api.orionmmtecheng.com/";
 exports.imageURL = imageURL;
 var paginationLimit = 5;
 exports.paginationLimit = paginationLimit;

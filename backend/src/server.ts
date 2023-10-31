@@ -96,7 +96,10 @@ export default class Server {
   constructor() {
     this.app = express();
 
-    this.app.use(cors());
+    const corsOptions = {
+      allowedHeaders: ['Content-Type', 'Authorization', 'userid'], // Add 'userid' to the allowed headers
+    };
+    this.app.use(cors(corsOptions));
     // this.app.use(helmet());
     this.app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
     this.app.use(bodyParser.json());
