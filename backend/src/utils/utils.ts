@@ -51,24 +51,24 @@ export const sendEmail = async (email: any, subject: any, text: any) => {
 export const sendContactUsEmail = async (email: any, subject: string, text: any) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      auth: {
-        user: "spprt.oscar@gmail.com",
-        pass: "cdbxlblhmnpobpyl"
-      }
-      // host: "oscar-admin.orionmmtecheng.com",
-      // port: 465,
-      // secure: true,
+      // host: 'smtp.gmail.com',
+      // port: 587,
+      // secure: false,
       // auth: {
-      //   user: "support@oscar-admin.orionmmtecheng.com",
-      //   pass: "he&#5nvAtZ%J"
-      // },
+      //   user: "spprt.oscar@gmail.com",
+      //   pass: "cdbxlblhmnpobpyl"
+      // }
+      host: "oscar-admin.orionmmtecheng.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "support@oscar-admin.orionmmtecheng.com",
+        pass: "he&#5nvAtZ%J"
+      },
     });
 
     await transporter.sendMail({
-      from: "spprt.oscar@gmail.com",
+      from: "oscar-admin.orionmmtecheng.com",
       to: email,
       subject: subject,
       text: text,
