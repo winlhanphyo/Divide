@@ -1,0 +1,9 @@
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.paginationContainer ul {
+  position: relative;
+  z-index: 0;
+}

@@ -1,0 +1,47 @@
+.orderImg {
+  width: 40%;
+  object-fit: cover;
+}
+
+.orderInfoRow {
+  margin-bottom: 2%;
+}
+
+.orderDetailContainer {
+  margin: 3% 1%;
+  text-align: center;
+}
+
+.orderDetailRow {
+  margin: 3% -1%;
+  text-align: center;
+}
+
+.orderDetailLabel {
+  text-align: center;
+  margin: 2% 0;
+  // border: 1.5px solid #0036ff;
+}
+
+.orderDetailInfo {
+  text-align: left;
+  margin-top: 12px !important;
+}
+
+.orderDetailItem {
+  margin-top: 1% !important;
+}
+
+.orderDetailInfoContainer {
+  margin-top: 1%;
+}
+
+.totalAmountRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.totalAmount {
+  padding: 15px !important;
+
+}

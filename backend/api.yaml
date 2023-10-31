@@ -1,0 +1,3025 @@
+openapi: 3.0.2
+servers:
+  - url: https://gigger-api.orionmmtecheng.com
+info:
+  description: This is API Doc for Gigger
+  title: Swagger API Doc for Gigger
+  version: 1.0.0
+
+tags:
+  - name: Authentication
+    description: Operations about Authentication
+  - name: Interests
+    description: Operations about Interests
+  - name: Events
+    description: Operations about Events
+  - name: Posts
+    description: Operations about Posts
+  - name: Users
+    description: Operations about Users
+  - name: Videos
+    description: Operations about Videos
+  - name: Campaigns
+    description: Operations about Campaigns
+
+paths:
+  # Auth Routes
+  /api/login:
+    post:
+      tags:
+        - Authentication
+      summary: Logs user into the system
+      security:
+        - {}
+      requestBody:
+        description: Login User into the system
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "user1"
+                password:
+                  type: string
+                  format: password
+                  example: "password123"
+          application/xml:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user1"
+                password:
+                  type: string
+                  format: password
+                  example: "password123"
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user1"
+                password:
+                  type: string
+                  format: password
+                  example: "password123"
+      responses:
+        "200":
+          description: Login Successfully.
+
+  /api/logout:
+    get:
+      tags:
+        - Authentication
+      summary: Logs out current logged in user session
+      security:
+        - {}
+      description: ""
+      operationId: logoutUser
+      parameters:
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Logout Successfully.
+
+  /api/signup:
+    post:
+      tags:
+        - Authentication
+      summary: Sign Up
+      security:
+        - {}
+      requestBody:
+        description: Signup user into the system
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "user1"
+                email:
+                  type: string
+                  example: "user1@gmail.com"
+                password:
+                  type: string
+                  format: password
+                  example: "password123"
+                role:
+                  type: number
+                  format: number
+                  example: 1
+                dob:
+                  type: string
+                  example: "2004-02-12"
+                interest:
+                  type: json
+                  example: [1, 2]
+      responses:
+        "200":
+          description: Signup user Successfully.
+
+  # Interest Routes
+  /api/interests:
+    get:
+      tags:
+        - Interests
+      summary: Get all interests
+      description: This can be used without login user.
+      security:
+        - {}
+      responses:
+        "200":
+          description: Returns all Interests
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+ 
+  # Event Routes
+  /api/v1/events:
+    get:
+      tags:
+        - Events
+      summary: Get all Events
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all Events
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      tags:
+        - Events
+      summary: Create Event
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: createEvent
+      requestBody:
+        description: Created event
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                  example: "Pink Floyd Live"
+                fromTime:
+                  type: string
+                  example: "8:00 pm"
+                toTime:
+                  type: string
+                  example: "11:00 pm"
+                address:
+                  type: string
+                  example: "Arena di Verona"
+                date:
+                  type: string
+                  example: "2023-07-20"
+                description:
+                  type: string
+                  example: "Preparazione concerto in piazza di sabato"
+                participants:
+                  type: json
+                  example: [1, 2, 3]
+                beforeReminder:
+                  type: string
+                  example: "00:30"
+                reminderStatus:
+                  type: string
+                  example: "busy"
+                latitude:
+                  type: string
+                  example: "1.354092790531372"
+                longitude:
+                  type: string
+                  example: "103.87865454226616"
+                artists:
+                  type: string
+                  example: [1, 2, 3]
+                color:
+                  type: string
+                  example: "#fff"
+                createdUser:
+                  type: number
+                  example: 1
+          application/xml:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                  example: "Pink Floyd Live"
+                fromTime:
+                  type: string
+                  example: "8:00 pm"
+                toTime:
+                  type: string
+                  example: "11:00 pm"
+                address:
+                  type: string
+                  example: "Arena di Verona"
+                date:
+                  type: string
+                  example: "2023-07-20"
+                description:
+                  type: string
+                  example: "Preparazione concerto in piazza di sabato"
+                participants:
+                  type: json
+                  example: [1, 2, 3]
+                beforeReminder:
+                  type: string
+                  example: "00:30"
+                reminderStatus:
+                  type: string
+                  example: "busy"
+                latitude:
+                  type: string
+                  example: "1.354092790531372"
+                longitude:
+                  type: string
+                  example: "103.87865454226616"
+                artists:
+                  type: string
+                  example: [1, 2, 3]
+                color:
+                  type: string
+                  example: "#fff"
+                createdUser:
+                  type: number
+                  example: 1
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                  example: "Pink Floyd Live"
+                fromTime:
+                  type: string
+                  example: "8:00 pm"
+                toTime:
+                  type: string
+                  example: "11:00 pm"
+                address:
+                  type: string
+                  example: "Arena di Verona"
+                date:
+                  type: string
+                  example: "2023-07-20"
+                description:
+                  type: string
+                  example: "Preparazione concerto in piazza di sabato"
+                participants:
+                  type: json
+                  example: [1, 2, 3]
+                beforeReminder:
+                  type: string
+                  example: "00:30"
+                reminderStatus:
+                  type: string
+                  example: "busy"
+                latitude:
+                  type: string
+                  example: "1.354092790531372"
+                longitude:
+                  type: string
+                  example: "103.87865454226616"
+                artists:
+                  type: string
+                  example: [1, 2, 3]
+                color:
+                  type: string
+                  example: "#fff"
+                createdUser:
+                  type: number
+                  example: 1
+      responses:
+        "200":
+          description: Created event Successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /api/v1/events/{id}:
+    get:
+      tags:
+        - Events
+      summary: Get event by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: getEventById
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to return
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns all Events
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Event is not found"
+
+    delete:
+      tags:
+        - Events
+      summary: Delete event by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: deleteEventById
+      parameters:
+        - name: id
+          in: path
+          description: Delete Event By Id
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Delete Event By Id
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Event is not found"
+
+  /api/v1/events/update/{id}:
+    post:
+      tags:
+        - Events
+      summary: Update a post
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: updateEventById
+      parameters:
+        - name: id
+          in: path
+          description: ID of event to return
+          required: true
+          schema:
+            type: string
+      operationId: updateEvent
+      requestBody:
+        description: Updated event
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                  example: "Pink Floyd Live"
+                fromTime:
+                  type: string
+                  example: "8:00 pm"
+                toTime:
+                  type: string
+                  example: "11:00 pm"
+                address:
+                  type: string
+                  example: "Arena di Verona"
+                date:
+                  type: string
+                  example: "2023-07-20"
+                description:
+                  type: string
+                  example: "Preparazione concerto in piazza di sabato"
+                participants:
+                  type: json
+                  example: [1, 2, 3]
+                beforeReminder:
+                  type: string
+                  example: "00:30"
+                reminderStatus:
+                  type: string
+                  example: "busy"
+                latitude:
+                  type: string
+                  example: "1.354092790531372"
+                longitude:
+                  type: string
+                  example: "103.87865454226616"
+                artists:
+                  type: string
+                  example: [1, 2, 3]
+                color:
+                  type: string
+                  example: "#fff"
+                createdUser:
+                  type: number
+                  example: 1
+          application/xml:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                  example: "Pink Floyd Live"
+                fromTime:
+                  type: string
+                  example: "8:00 pm"
+                toTime:
+                  type: string
+                  example: "11:00 pm"
+                address:
+                  type: string
+                  example: "Arena di Verona"
+                date:
+                  type: string
+                  example: "2023-07-20"
+                description:
+                  type: string
+                  example: "Preparazione concerto in piazza di sabato"
+                participants:
+                  type: json
+                  example: [1, 2, 3]
+                beforeReminder:
+                  type: string
+                  example: "00:30"
+                reminderStatus:
+                  type: string
+                  example: "busy"
+                latitude:
+                  type: string
+                  example: "1.354092790531372"
+                longitude:
+                  type: string
+                  example: "103.87865454226616"
+                artists:
+                  type: string
+                  example: [1, 2, 3]
+                color:
+                  type: string
+                  example: "#fff"
+                createdUser:
+                  type: number
+                  example: 1
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                eventName:
+                  type: string
+                  example: "Pink Floyd Live"
+                fromTime:
+                  type: string
+                  example: "8:00 pm"
+                toTime:
+                  type: string
+                  example: "11:00 pm"
+                address:
+                  type: string
+                  example: "Arena di Verona"
+                date:
+                  type: string
+                  example: "2023-07-20"
+                description:
+                  type: string
+                  example: "Preparazione concerto in piazza di sabato"
+                participants:
+                  type: json
+                  example: [1, 2, 3]
+                beforeReminder:
+                  type: string
+                  example: "00:30"
+                reminderStatus:
+                  type: string
+                  example: "busy"
+                latitude:
+                  type: string
+                  example: "1.354092790531372"
+                longitude:
+                  type: string
+                  example: "103.87865454226616"
+                artists:
+                  type: string
+                  example: [1, 2, 3]
+                color:
+                  type: string
+                  example: "#fff"
+                createdUser:
+                  type: number
+                  example: 1
+      responses:
+        "200":
+          description: Event is updated successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Event is not found.
+
+  /api/v1/events/upcoming:
+    get:
+      tags:
+        - Events
+      summary: Get upcoming event by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: upcomingEvent
+      parameters:
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns all Events
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Event is not found"    
+
+  #userRoute
+  /api/v1/users:
+    get:
+      tags:
+        - Users
+      summary: Get all Users
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all Users
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      tags:
+        - Users
+      summary: Create User
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: header
+          description: ID of login User.
+          required: true
+          type: number
+      operationId: createUser
+      requestBody:
+        description: Created user
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                status:
+                  type: string
+                genre:
+                  type: string
+                  example: [1, 2]
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                status:
+                  type: string
+                genre:
+                  type: string
+                  example: [1, 2]
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                status:
+                  type: string
+                genre:
+                  type: string
+                  example: [1, 2]
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+      responses:
+        "200":
+          description: User is created successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: User is created successfully.
+
+  /api/v1/users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns User By Id
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "User is not found"
+    delete:
+      tags:
+        - Users
+      summary: Delete user by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: deleteUserById
+      parameters:
+        - name: id
+          in: path
+          description: Delete User By Id
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: User is deleted successfully.
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "User is not found"
+
+  /api/v1/users/{id}/video:
+    get:
+      tags:
+        - Users
+      summary: Get Video list by User ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: getPostByUserId
+      parameters:
+        - name: id
+          in: path
+          description: UserId
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns all Video By UserId
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "User is not found"
+
+
+  /api/v1/users/profile/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user profile by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: getUserProfileById
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns User By Id
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "User is not found"
+
+
+  /api/v1/users/profile/{id}/like:
+    get:
+      tags:
+        - Users
+      summary: User like video
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userLikeProfile
+      parameters:
+        - name: id
+          in: path
+          description: artistId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User like profile status is successfully added.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Profile is not found.
+
+  /api/v1/users/profile/{id}/view:
+    get:
+      tags:
+        - Users
+      summary: User view profile
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userViewProfile
+      parameters:
+        - name: id
+          in: path
+          description: artistId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User view profile status is successfully added.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Video is not found.
+
+  /api/v1/user/profile/{id}/unlike:
+    get:
+      tags:
+        - Users
+      summary: User unlike profile
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userUnlikeProfile
+      parameters:
+        - name: id
+          in: path
+          description: artistId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User unlike profile status successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Profile is not found.
+
+  /api/v1/users/profile/{id}/follow:
+    get:
+      tags:
+        - Users
+      summary: User follow profile
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userFollowProfile
+      parameters:
+        - name: id
+          in: path
+          description: artistId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User follow profile status is successfully added.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Profile is not found.
+
+  /api/v1/user/profile/{id}/unfollow:
+    get:
+      tags:
+        - Users
+      summary: User unfollow profile
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userUnfollowProfile
+      parameters:
+        - name: id
+          in: path
+          description: artistId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User unfollow profile status successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Profile is not found.
+
+
+  /api/v1/users/{id}:
+    post:
+      tags:
+        - Users
+      summary: Update a user
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: updateUserById
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+      operationId: updateUser
+      requestBody:
+        description: Updated user
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                status:
+                  type: string
+                genre:
+                  type: string
+                  example: [1, 2]
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                status:
+                  type: string
+                genre:
+                  type: string
+                  example: [1, 2]
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+      responses:
+        "200":
+          description: User is updated successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: User is not found.
+
+  /api/v1/users/update/{id}:
+    post:
+      tags:
+        - Users
+      summary: Update a user
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: updateUserById
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+      operationId: updateUser
+      requestBody:
+        description: Updated user
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "https://www.youtube.com/@planetgt495"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Mario Mix"
+                email:
+                  type: string
+                  example: "mariomix@gmail.com"
+                password:
+                  type: string
+                  example: "12345"
+                role:
+                  type: number
+                  example: 1
+                dob:
+                  type: string
+                  example: 1996-12-16
+                interest:
+                  type: string
+                  example: [1, 2]
+                profile:
+                  type: string
+                  format: binary
+                highlight:
+                  type: string
+                  example: "Professional Sound Engeering"
+                address:
+                  type: string
+                  example: "Via Giolitti"
+                description:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                phone:
+                  type: string
+                  example: "+3912312312"
+                services:
+                  type: string
+                  example: "Distribution on every channel, Promotion on radio and Socail Media, Recording Mixing and Mastering"
+                experiences:
+                  type: string
+                  example: "Lorem ipsum dolor ist samet, Consectetuer aqipiscing elit, sed Diam nonummy nibh euismod tincidunt ut laoreet bla bla bla"
+                studies:
+                  type: string
+                  example: "School of Rock Ectetuer adipiscing elit, sed dial nonummy nibs euismod incident bla bla bla"
+                achievements:
+                  type: string
+                  example: "Lorem ipsum dollar sit amen, Consectetuer aqipiscing elit, Sed diam nonummy nibh euismod tincidunt"
+                customTitle:
+                  type: string
+                  example: "Custom Text- Lorem ipsum dolor sit met, conshctetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt"
+                instagram:
+                  type: string
+                  example: "Via Giolitti"
+                youtube:
+                  type: string
+                  example: "Hey there I’m Ingviel! Loren ipsum dolor sit amen, conshctetuer adlpiscing elit, sed dial nonummy nigh euismod incident ut laoreet dolore magna aliquot erat volutpat. Ut wis!"
+                facebook:
+                  type: string
+                twitter:
+                  type: string
+                tittok:
+                  type: string
+                website:
+                  type: string
+      responses:
+        "200":
+          description: User is updated successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: User is not found.
+
+  # /api/v1/users/top/video/list:
+  #   get:
+  #     tags:
+  #       - Users
+  #     summary: Get all Videos
+  #     description: This can only be done by the logged in user.
+  #     security:
+  #       - bearerAuth: []
+  #     parameters:
+  #       - name: userId
+  #         in: header
+  #         description: login UserId 
+  #         schema:
+  #           type: number
+  #       - name: page
+  #         in: query
+  #         description: PageNumber 
+  #         schema:
+  #           type: number
+  #       - name: size
+  #         in: query
+  #         description: Number of users that want to show per Page
+  #         schema:
+  #           type: number
+  #     responses:
+  #       "200":
+  #         description: Returns all Videos
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+
+  # /api/v1/users/video/list:
+  #   get:
+  #     tags:
+  #       - Users
+  #     summary: Get all Videos
+  #     description: This can only be done by the logged in user.
+  #     security:
+  #       - bearerAuth: []
+  #     parameters:
+  #       - name: page
+  #         in: query
+  #         description: PageNumber 
+  #         schema:
+  #           type: number
+  #       - name: size
+  #         in: query
+  #         description: Number of users that want to show per Page
+  #         schema:
+  #           type: number
+  #     responses:
+  #       "200":
+  #         description: Returns all Videos
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+
+  # /api/v1/users/upload/video:
+  #   post:
+  #     tags:
+  #       - Users
+  #     summary: Upload User Video
+  #     description: This can only be done by the logged in user.
+  #     security:
+  #       - bearerAuth: []
+  #     operationId: uploadUserVideo
+  #     parameters:
+  #       - name: userId
+  #         in: header
+  #         description: uploaded userId
+  #         required: true
+  #         schema:
+  #           type: string
+  #     operationId: uploadUserVideo
+  #     requestBody:
+  #       description: Upload User Video
+  #       content:
+  #         multipart/form-data::
+  #           schema:
+  #             type: object
+  #             properties:
+  #               name:
+  #                 type: string
+  #                 example: "Dancer in my Video!"
+  #               description:
+  #                 type: string
+  #                 example: "Become a dancer in my crew for the new album"
+  #               video:
+  #                 type: string
+  #                 format: binary
+  #         application/octet-stream:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               name:
+  #                 type: string
+  #                 example: "Dancer in my Video!"
+  #               description:
+  #                 type: string
+  #                 example: "Become a dancer in my crew for the new album"
+  #               video:
+  #                 type: string
+  #                 format: binary
+  #         application/x-www-form-urlencoded:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               name:
+  #                 type: string
+  #                 example: "Dancer in my Video!"
+  #               description:
+  #                 type: string
+  #                 example: "Become a dancer in my crew for the new album"
+  #               video:
+  #                 type: string
+  #                 format: binary
+  #     responses:
+  #       "200":
+  #         description: User Video is uploaded successfully.
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+  #       "404":
+  #         description: API is not found.
+
+
+  # /api/v1/users/video/{id}/like:
+  #   get:
+  #     tags:
+  #       - Users
+  #     summary: User like video
+  #     description: This can only be done by the logged in user.
+  #     security:
+  #       - bearerAuth: []
+  #     operationId: userLikeVideo
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         description: videoId
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: userId
+  #         in: header
+  #         description: userId
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       "200":
+  #         description: User like video status is successfully added.
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+  #       "404":
+  #         description: Video is not found.
+
+  # /api/v1/users/video/{id}/view:
+  #   get:
+  #     tags:
+  #       - Users
+  #     summary: User view video
+  #     description: This can only be done by the logged in user.
+  #     security:
+  #       - bearerAuth: []
+  #     operationId: userViewVideo
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         description: videoId
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: userId
+  #         in: header
+  #         description: userId
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       "200":
+  #         description: User view video status is successfully added.
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+  #       "404":
+  #         description: Video is not found.
+
+  # /api/v1/users/video/{id}/unlike:
+  #   get:
+  #     tags:
+  #       - Users
+  #     summary: User unlike video
+  #     description: This can only be done by the logged in user.
+  #     security:
+  #       - bearerAuth: []
+  #     operationId: userUnlikeVideo
+  #     parameters:
+  #       - name: videoId
+  #         in: path
+  #         description: videoId
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: userId
+  #         in: header
+  #         description: userId
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       "200":
+  #         description: User unlike video status successfully.
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+  #       "404":
+  #         description: Video is not found.
+
+  # Post Routes
+  /api/v1/posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all Posts
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns all Posts
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      parameters:
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      tags:
+        - Posts
+      summary: Create Post
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: createPost
+      requestBody:
+        description: Created post
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Created post Successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /api/v1/posts/{id}:
+    get:
+      tags:
+        - Posts
+      summary: Get post by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: getPostById
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns all Posts
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Post is not found"
+
+    delete:
+      tags:
+        - Posts
+      summary: Delete post by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: deletePostById
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Delete Post By Id
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Post is not found"
+
+  /api/v1/posts/{id}/support:
+    post:
+      tags:
+        - Posts
+      summary: Support the post
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: supportPost
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Support the post
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: ""
+                amount:
+                  type: string
+                  example: "1000"
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "I support this post"
+                amount:
+                  type: string
+                  example: "1000"
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: ""
+                amount:
+                  type: string
+                  example: "1000"
+      responses:
+        "200":
+          description: Support Post Successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Post is not found.
+
+
+  /api/v1/posts/update/{id}:
+    post:
+      tags:
+        - Posts
+      summary: Update a post
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: updatePostById
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      operationId: updatePost
+      requestBody:
+        description: Updated post
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Post is updated successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Post is not found.
+
+  /api/v1/posts/top/video/list:
+    get:
+      tags:
+        - Posts
+      summary: Get Top Page Video List.
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: header
+          description: login UserId 
+          schema:
+            type: number
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns top Videos for top page.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /api/v1/posts/top/video/{id}/random:
+    get:
+      tags:
+        - Posts
+      summary: Get Top Video when user refresh.
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: current post id.
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: login UserId 
+          schema:
+            type: number
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns random top Videos.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+  /api/v1/posts/video/list:
+    get:
+      tags:
+        - Posts
+      summary: Get all Videos
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all Videos
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /api/v1/posts/{id}/video/like:
+    get:
+      tags:
+        - Posts
+      summary: User like video
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userLikeVideo
+      parameters:
+        - name: id
+          in: path
+          description: postId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Post like video status is successfully added.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Video is not found.
+
+  /api/v1/posts/{id}/video/view:
+    get:
+      tags:
+        - Posts
+      summary: User view video
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userViewVideo
+      parameters:
+        - name: id
+          in: path
+          description: postId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Post view video status is successfully added.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Video is not found.
+
+  /api/v1/posts/{id}/video/unlike:
+    get:
+      tags:
+        - Posts
+      summary: User unlike video
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: userUnlikeVideo
+      parameters:
+        - name: id
+          in: path
+          description: postId
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User unlike video status successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Video is not found.   
+
+  # Post Routes  
+  /api/v1/posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all Posts
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns all Posts
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      parameters:
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      tags:
+        - Posts
+      summary: Create Post
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: createPost
+      requestBody:
+        description: Created post
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  example: "Pink Floyd Live"
+                music:
+                  type: json
+                  example: [1, 2]
+                latitude:
+                  type: string
+                  example: "1.3505696580073028"
+                longitude:
+                  type: string
+                  example: "103.86638379305228"
+                hashTag:
+                  type: string
+                  example: "#newVideo #newsong #passion #jazz #followme #NFT #thenewmusicera #dickgamberville"
+                advertisementFormat:
+                  type: string
+                  example: "1"
+                searchResult:
+                  type: string
+                  example: "Artists"
+                giglistClassifieds:
+                  type: string
+                  example: "Musicians"
+                targetAudience:
+                  type: string
+                  example: "Auto"
+                privateContent:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                forMyFollowersOnly:
+                  type: boolean
+                  example: true
+                video:
+                  type: string
+                  format: binary
+                thumbnail:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Created event Successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # Campaign Routes
+  /api/v1/campaigns:
+    get:
+      tags:
+        - Campaigns
+      summary: Get all Campaigns
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: PageNumber 
+          schema:
+            type: number
+        - name: size
+          in: query
+          description: Number of users that want to show per Page
+          schema:
+            type: number
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns all Campaigns
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      parameters:
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      tags:
+        - Campaigns
+      summary: Create Campaign
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: createCampaign
+      requestBody:
+        description: Created campaign
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Campaign1"
+                description:
+                  type: string
+                  example: "description"
+                endDate:
+                  type: string
+                  example: "2023-10-01"
+                hashTags:
+                  type: string
+                  example: "#fyp"
+                location:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                followerOnly:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+          application/xml:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Campaign1"
+                description:
+                  type: string
+                  example: "description"
+                endDate:
+                  type: string
+                  example: "2023-10-01"
+                hashTags:
+                  type: string
+                  example: "#fyp"
+                location:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                followerOnly:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Campaign1"
+                description:
+                  type: string
+                  example: "description"
+                endDate:
+                  type: string
+                  example: "2023-10-01"
+                hashTags:
+                  type: string
+                  example: "#fyp"
+                location:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                followerOnly:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Created event Successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+       
+  /api/v1/campaigns/{id}:
+    get:
+      tags:
+        - Campaigns
+      summary: Get campaign by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: getCampaignById
+      parameters:
+        - name: id
+          in: path
+          description: ID of campaign to return
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Returns all Campaigns
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Campaign is not found"
+
+    delete:
+      tags:
+        - Campaigns
+      summary: Delete campaign by ID
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: deleteCampaignById
+      parameters:
+        - name: id
+          in: path
+          description: ID of campaign to return
+          required: true
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Delete Campaign By Id
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "404":
+            description: "Campaign is not found"
+
+  /api/v1/campaigns/update/{id}:
+    post:
+      tags:
+        - Campaigns
+      summary: Update a campaign
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      operationId: updateCampaignById
+      parameters:
+        - name: id
+          in: path
+          description: ID of campaign to return
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: header
+          description: ID of login UserId
+          required: true
+          schema:
+            type: string
+      operationId: updateCampaign
+      requestBody:
+        description: Updated campaign
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Campaign1"
+                description:
+                  type: string
+                  example: "description"
+                endDate:
+                  type: string
+                  example: "2023-10-01"
+                hashTags:
+                  type: string
+                  example: "#fyp"
+                location:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                followerOnly:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+          application/xml:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Campaign1"
+                description:
+                  type: string
+                  example: "description"
+                endDate:
+                  type: string
+                  example: "2023-10-01"
+                hashTags:
+                  type: string
+                  example: "#fyp"
+                location:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                followerOnly:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Campaign1"
+                description:
+                  type: string
+                  example: "description"
+                endDate:
+                  type: string
+                  example: "2023-10-01"
+                hashTags:
+                  type: string
+                  example: "#fyp"
+                location:
+                  type: boolean
+                  example: true
+                memberShipContent:
+                  type: boolean
+                  example: true
+                followerOnly:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Campaign is updated successfully.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Campaign is not found.
+
+
+  #videoRoute
+  /api/video/{filename}/stream:
+    get:
+      tags:
+        - Videos
+      summary: Video Stream API
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: filename
+          in: path
+          description: video file name 
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Video Stream
+
+  /api/video/{filename}/download:
+    get:
+      tags:
+        - Videos
+      summary: Video Downalod API
+      description: This can only be done by the logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: filename
+          in: path
+          description: video file name 
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Video Download 
+  
+components:
+  # Schema Usage in component
+  # schemas:
+  #   Post:
+  #     type: object
+  #     properties:
+  #       title:
+  #         type: string
+  #         example: "Post01"
+  #       description:
+  #         type: string
+  #         example: "Description01"
+  #       status:
+  #         type: boolean
+  #         example: true
+  #       created_user_id:
+  #         type: string
+  #         example: "62fde243b554f4955fdf7914"
+  #     xml:
+  #       name: post
+  #   User:
+  #     type: object
+  #     properties:
+  #       name:
+  #         type: string
+  #         example: "Post01"
+  #       email:
+  #         type: string
+  #         example: "Description01"
+  #       password:
+  #         type: string
+  #         format: password
+  #         example: "password123"
+  #       type:
+  #         type: string
+  #         description: User Roles
+  #         enum:
+  #           - Admin
+  #           - User
+  #       phone:
+  #         type: string
+  #         example: "0912345678"
+  #       dob:
+  #         type: string
+  #         format: date
+  #         example: 2022-06-30
+  #       address:
+  #         type: string
+  #         example: "Address"
+  #       profile:
+  #         type: string
+  #         example: "apiuploads/0fe05c06-2f9d-4056-b80d-ffa37dee7c93_img1.jpg"
+  #     xml:
+  #       name: user
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+# 2) Apply the security globally to all operations
+security:
+  - bearerAuth: []
