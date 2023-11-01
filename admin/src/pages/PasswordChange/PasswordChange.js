@@ -65,7 +65,9 @@ const PasswordChange = () => {
           window.location.href = "/admin/user";
         });
       }).catch((err) => {
-        swal("Oops!", err.toString(), "error");
+        console.log('err', err);
+        let msg = err?.response?.data?.message ? err.response?.data?.message : err?.toString();
+        swal("Oops!", msg, "error");
         setLoading(false);
       });
     }

@@ -17,9 +17,9 @@ class MediaController {
     let offset = Number(req.query.page) - 1 || 0;
     const size = Number(req.query.size) || PAGINATION_LIMIT;
     const name = req.query.name;
+    const catId = req.query.catId;
     let page = offset * size;
     let otherFindOptions = undefined;
-
 
     if (name) {
       otherFindOptions = {
@@ -30,7 +30,7 @@ class MediaController {
         }
       };
     }
-    const response = await mediaService.getMediaList(undefined, otherFindOptions, page, size, res);
+    const response = await mediaService.getMediaList(undefined, otherFindOptions, page, size, res, catId);
     return response;
   }
 

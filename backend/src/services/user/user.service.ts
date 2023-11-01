@@ -40,7 +40,7 @@ class UserService {
         };
       }
 
-      const userCount = await UserDbModel.count();
+      const userCount = await UserDbModel.count(otherFindOptions);
 
       const userList = await UserDbModel.findAll({
         limit,
@@ -51,7 +51,7 @@ class UserService {
       return res.json({
         count: userCount,
         data: userList,
-        offset
+        offset: page
       });
     } catch (e: any) {
       console.log('------get User API Error----', e);
@@ -151,6 +151,50 @@ class UserService {
       });
     }
   }
+
+  /**
+   * password change.
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+  async passwordChange(req: any, res: any): Promise<any> {
+    try {
+      const userData = await this.getUserDataWithId(req.params?.id, res);
+
+      if (!bcrypt.compareSync(req.body?.password, userData?.dataValues?.password)) {
+        return res.status(400).send({
+          success: false,
+          message: 'Incorrect password'
+        });
+      }
+
+      if (bcrypt.compareSync(req.body.newPassword, userData?.dataValues?.password)) {
+        return res.status(400).send({
+          success: false,
+          message: 'Current Password and New Password must not be same.'
+        });
+      }
+
+      const param = {
+        password: await bcrypt.hash(req.body.newPassword, 12),
+        updatedAt: new Date().toISOString()
+      }
+
+      const updateUser = await UserDbModel.update(param, {
+        where: { id: req.params?.id as number }
+      });
+      res.json({
+        message: "Password is changed successfully!",
+        data: updateUser
+      });
+    } catch (err: any) {
+      console.log("Password Change API Error", err);
+      return res.status(400).json({
+        message: err.toString()
+      });
+    }
+  };
 
   /**
    * delete user.

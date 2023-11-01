@@ -8,9 +8,18 @@ class MediaService {
    * @param otherFindOptions 
    * @returns 
    */
-  async getMediaList(mediaAttributes?: Array<any>, otherFindOptions?: any, offset?: number, limit?: number, res?: any): Promise<any> {
+  async getMediaList(mediaAttributes?: Array<any>, otherFindOptions?: any, offset?: number, limit?: number, res?: any, catId?: any): Promise<any> {
     try {
       limit = limit && limit > 0 ? limit : undefined;
+      catId = catId ? catId : undefined;
+
+      let condition = {};
+      if (catId) {
+        condition = {
+          where: { categoryId: catId }
+        };
+      }
+
       let mediaList = await MediaDbModel.findAll({
         attributes: mediaAttributes,
         limit,
@@ -19,7 +28,8 @@ class MediaService {
         include: [
           {
             model: ProductDbModel,
-            as: "products"
+            as: "products",
+            ...condition
           }
         ]
       });
@@ -29,7 +39,8 @@ class MediaService {
         include: [
           {
             model: ProductDbModel,
-            as: "products"
+            as: "products",
+            ...condition
           }
         ]
       });

@@ -39,6 +39,17 @@ class UserController {
   }
 
   /**
+   * password change with user id.
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+  async passwordChange(req: Request, res: Response) {
+    const data = await userService.passwordChange(req, res);
+    return data;
+  }
+
+  /**
   * delete event.
   * @param req 
   * @param res 

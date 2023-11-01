@@ -13,7 +13,6 @@ class ProductService {
     try {
       limit = limit && limit > 0 ? limit : undefined;
 
-      console.log('find options', otherFindOptions);
       let mediaFindOption = status ?
       {
         where: { 
@@ -376,6 +375,21 @@ class ProductService {
         return res.status(404).json({
           message: "Product data with category id is not found"
         });
+      }
+
+      for (let i = 0; i < productData.length; i++) {
+        const mediaData: any = productData[i]?.dataValues?.media;
+        for (let j = 0; j < mediaData?.length; j++) {
+          if (mediaData[j]?.dataValues?.type === "video") {
+            mediaData[j].dataValues.cover = "upload/user/video/default.jpg";
+          } else if (mediaData[j].type === "music") {
+            mediaData[j].dataValues.cover = "upload/user/music/default.jpg";
+          } else if (mediaData[j].type === "text") {
+            mediaData[j].dataValues.cover = "upload/user/text/default.jpg";
+          } else if (mediaData[j].type === "photo") {
+            mediaData[j].dataValues.cover = mediaData[j]?.url;
+          }
+        }
       }
 
       return res.json({
