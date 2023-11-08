@@ -4,6 +4,7 @@ import { mediaController } from "../../../controllers/media";
 const router = new Router();
 
 router.get('/product/:id', mediaController.getMediaWithProductId);
+router.get('/:id/download', mediaController.downloadMedia);
 router.get('/:id', mediaController.detailMedia);
 router.post('/:id', mediaController.changeMedia);
 router.post('/', mediaController.createMedia);

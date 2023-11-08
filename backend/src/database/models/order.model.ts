@@ -18,7 +18,7 @@ export interface IOrdertModel {
   phone: string;
   status: string;
   totalAmount: string;
-  orderDetailId: number;
+  orderDetailId: string;
   paymentDone: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -83,7 +83,7 @@ const modelAttributes: DbModelFieldInit<Partial<IOrdertModel>> = {
     allowNull: false
   },
   orderDetailId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     defaultValue: false
   },
@@ -97,9 +97,9 @@ const modelAttributes: DbModelFieldInit<Partial<IOrdertModel>> = {
 @associative
 export class OrderDbModel extends Model {
   static associate({
-    OrderDetailDbModel
+    UserDbModel
   }: any) {
-    this.belongsTo(OrderDetailDbModel, { foreignKey: 'orderDetailId', as: 'orderDetail', targetKey: 'id' });
+    this.belongsTo(UserDbModel, { foreignKey: 'customer', as: 'customerData', targetKey: 'id' });
   }
 }
 

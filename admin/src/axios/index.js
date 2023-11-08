@@ -15,8 +15,8 @@ const getUser = () => {
   return res;
 }
 const instance = axios.create({
-  baseURL: "http://davide-api.orionmmtecheng.com/api"
-  // baseURL: "http://localhost:4000/api"
+  // baseURL: "http://davide-api.orionmmtecheng.com/api"
+  baseURL: "http://localhost:4000/api"
 });
 
 const user = getUser();

@@ -22,7 +22,7 @@ module.exports = {
           phone: '+391234',
           status: 'new',
           totalAmount: 1000,
-          orderDetailId: 1,
+          orderDetailId: "[1]",
           paymentDone: true,
           createdAt: '2023-07-12',
           updatedAt: '2023-07-12'

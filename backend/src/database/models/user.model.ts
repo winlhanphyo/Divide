@@ -60,11 +60,11 @@ const modelAttributes: DbModelFieldInit<Partial<IUserModel>> = {
 };
 @associative
 export class UserDbModel extends Model {
-  static associate({ CategoryDbModel, ProductDbModel }: any) {
+  static associate({ OrderDbModel, ProductDbModel }: any) {
     // this.belongsToMany(EventDbModel, { through: 'event_user' });
     // this.hasMany(EventDbModel, { foreignKey: 'createdUser', as: 'user' });
     // this.hasMany(CategoryDbModel);
-    // this.hasMany(CategoryDbModel, { foreignKey: 'createdUserId', as: 'createdCategoryByUser' });
+    this.hasMany(OrderDbModel,  { foreignKey: 'customer', as: 'customerData' });
     // this.hasMany(ProductDbModel, { foreignKey: 'createdUserId', as: 'createdProductByUser' });
     // this.hasMany(ProductDbModel, { foreignKey: 'updatedUserId', as: 'updatedProductByUser' });
   }

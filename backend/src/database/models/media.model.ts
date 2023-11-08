@@ -43,10 +43,11 @@ const modelAttributes: DbModelFieldInit<Partial<IMediaModel>> = {
 export class MediaDbModel extends Model {
   static associate({
     ProductMediaDbModel,
-    ProductDbModel
+    ProductDbModel,
+    OrderDetailDbModel
   }: any) {
-    MediaDbModel.belongsToMany(ProductDbModel, { through: ProductMediaDbModel, as: 'products', foreignKey: 'mediaId' });
-    // this.belongsTo(ProductDbModel, { foreignKey: 'productId', as: 'productMedia', targetKey: 'id' });
+    this.belongsToMany(ProductDbModel, { through: ProductMediaDbModel, as: 'products', foreignKey: 'mediaId' });
+    this.hasMany(OrderDetailDbModel, { foreignKey: 'mediaId', as: 'mediaData' });
     // this.hasMany(OrderDetailDbModel, { foreignKey: 'mediaId', as: 'media' });
   }
 }

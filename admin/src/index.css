@@ -33,3 +33,20 @@ code {
 .collapse.show {
   min-height: 160px;
 }
+
+.uploaded-files-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.uploaded-files {
+  border: 1px solid #0d6efd;
+  margin: 5px 5px;
+  border-radius: 5px;
+  padding: 2px 10px;
+  color: #0d6efd;
+}
+
+.file-icon {
+  margin:   5px 0px 5px 5px
+}

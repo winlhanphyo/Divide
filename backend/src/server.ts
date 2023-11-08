@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import multer from 'multer';
 import { v4 } from 'uuid';
 import passport from 'passport';
+import { orderController } from "./controllers/order";
 import { config } from './config';
 import { router } from './routes';
 import authRouter from './routes/auth/auth.router';
@@ -150,6 +151,39 @@ export default class Server {
 
     this.app.get('/', (req, res) => {
       res.send('Welcome to My Website')
+    });
+
+    /**
+     * stripe payment webhook.
+     */
+    this.app.post('/webhook', express.json({type: 'application/json'}), (request: any, response: any) => {
+      const event = request.body;
+    
+      // Handle the event
+      switch (event.type) {
+        case 'payment_intent.succeeded':
+          const paymentIntent = event.data.object;
+          console.log('object', event.data.object);
+          console.log('metadata', event.data.object.metadata);
+          const orderId = event.data.object.metadata.orderId;
+          console.log('orderId');
+          orderController.successPayment(orderId);
+  
+          // Then define and call a method to handle the successful payment intent.
+          // handlePaymentIntentSucceeded(paymentIntent);
+          break;
+        case 'payment_method.attached':
+          const paymentMethod = event.data.object;
+          // Then define and call a method to handle the successful attachment of a PaymentMethod.
+          // handlePaymentMethodAttached(paymentMethod);
+          break;
+        // ... handle other event types
+        default:
+          console.log(`Unhandled event type ${event.type}`);
+      }
+    
+      // Return a response to acknowledge receipt of the event
+      response.json({received: true});
     });
 
     // this.app.get('/api/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));

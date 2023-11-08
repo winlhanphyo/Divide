@@ -37,7 +37,7 @@ export class OrderDetailDbModel extends Model {
   static associate({
     MediaDbModel
   }: any) {
-    this.belongsTo(MediaDbModel, { foreignKey: 'media', as: 'orderMedia', targetKey: 'id' });
+    this.belongsTo(MediaDbModel, { foreignKey: 'mediaId', as: 'mediaData', targetKey: 'id' });
   }
 }
 

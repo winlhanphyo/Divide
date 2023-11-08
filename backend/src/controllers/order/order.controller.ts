@@ -21,7 +21,7 @@ class OrderController {
     const name = req.query.name;
     let otherFindOptions = undefined;
     console.log('offset: --------------', page, offset);
-    
+
     if (name) {
       otherFindOptions = {
         where: {
@@ -69,12 +69,45 @@ class OrderController {
   }
 
   /**
- * delete order video.
- * @param req 
- * @param res 
- */
+   * order Detail
+   * @param req 
+   * @param res 
+   */
+  async getUserOrder(req: Request, res: Response) {
+    let offset = Number(req.query.page) - 1 || 0;
+    const size = Number(req.query.size) || PAGINATION_LIMIT;
+    let page = offset * size;
+    const userId = req.headers['userid'];
+    let otherFindOptions = undefined;
+
+    if (userId) {
+      otherFindOptions = {
+        where: {
+          customer: userId
+        }
+      };
+    }
+    const response = await orderService.getUserOrder(undefined, otherFindOptions, page, size, res);
+    return response;
+  }
+
+  /**
+   * delete order video.
+   * @param req 
+   * @param res 
+   */
   deleteOrder(req: any, res: any) {
     const data = orderService.deleteOrder(req, res);
+    return data;
+  }
+
+  /**
+   * success payment.
+   * @param orderId 
+   * @returns 
+   */
+  async successPayment(orderId: any) {
+    const data = await orderService.successPayment(orderId);
     return data;
   }
 

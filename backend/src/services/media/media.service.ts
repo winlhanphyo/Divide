@@ -3,7 +3,7 @@ import { ProductDbModel, MediaDbModel, ProductMediaDbModel, IMediaModel } from "
 
 class MediaService {
   /**
-   * get events list.
+   * get media list.
    * @param eventAttributes 
    * @param otherFindOptions 
    * @returns 
@@ -45,17 +45,17 @@ class MediaService {
         ]
       });
 
-        for (let i = 0; i < mediaList?.length; i++) {
-          if (mediaList[i]?.dataValues?.type === "video") {
-            mediaList[i].dataValues.cover = "upload/user/video/default.jpg";
-          } else if (mediaList[i].dataValues.type === "music") {
-            mediaList[i].dataValues.cover = "upload/user/music/default.jpg";
-          } else if (mediaList[i].dataValues.type === "text") {
-            mediaList[i].dataValues.cover = "upload/user/text/default.jpg";
-          } else if (mediaList[i].dataValues.type === "photo") {
-            mediaList[i].dataValues.cover = mediaList[i]?.dataValues?.url;
-          }
+      for (let i = 0; i < mediaList?.length; i++) {
+        if (mediaList[i]?.dataValues?.type === "video") {
+          mediaList[i].dataValues.cover = "upload/user/video/default.jpg";
+        } else if (mediaList[i].dataValues.type === "music") {
+          mediaList[i].dataValues.cover = "upload/user/music/default.jpg";
+        } else if (mediaList[i].dataValues.type === "text") {
+          mediaList[i].dataValues.cover = "upload/user/text/default.jpg";
+        } else if (mediaList[i].dataValues.type === "photo") {
+          mediaList[i].dataValues.cover = mediaList[i]?.dataValues?.url;
         }
+      }
 
       return res.json({
         success: true,
@@ -208,15 +208,15 @@ class MediaService {
         }
       }
 
-        if (mediaData?.dataValues?.type === "video") {
-          mediaData.dataValues.cover = "upload/user/video/default.jpg";
-        } else if (mediaData.dataValues.type === "music") {
-          mediaData.dataValues.cover = "upload/user/music/default.jpg";
-        } else if (mediaData.dataValues.type === "text") {
-          mediaData.dataValues.cover = "upload/user/text/default.jpg";
-        } else if (mediaData.dataValues.type === "photo") {
-          mediaData.dataValues.cover = mediaData?.dataValues?.url;
-        }
+      if (mediaData?.dataValues?.type === "video") {
+        mediaData.dataValues.cover = "upload/user/video/default.jpg";
+      } else if (mediaData.dataValues.type === "music") {
+        mediaData.dataValues.cover = "upload/user/music/default.jpg";
+      } else if (mediaData.dataValues.type === "text") {
+        mediaData.dataValues.cover = "upload/user/text/default.jpg";
+      } else if (mediaData.dataValues.type === "photo") {
+        mediaData.dataValues.cover = mediaData?.dataValues?.url;
+      }
 
       if (res) {
         return res.json({
@@ -252,7 +252,7 @@ class MediaService {
           {
             model: ProductDbModel,
             as: "products",
-            where: { 
+            where: {
               id: id
             },
           }
@@ -264,7 +264,7 @@ class MediaService {
           {
             model: ProductDbModel,
             as: "products",
-            where: { 
+            where: {
               id: id
             },
           }
@@ -288,6 +288,41 @@ class MediaService {
         success: false,
         message: e.toString()
       });
+    }
+  }
+
+  /**
+   * download media.
+   * @param req 
+   * @param res 
+   */
+  async downloadMedia(req: any, res: any) {
+    try {
+      const media_id = req.params.id;
+      const mediaData = await MediaDbModel.findOne({
+        where: {
+          id: media_id
+        },
+        include: [
+          {
+            model: ProductDbModel,
+            as: "products"
+          }
+        ]
+      }) as any;
+      const mediaUrl = mediaData?.dataValues?.url;
+      if (!mediaUrl) {
+        if (res) {
+          return res.status(404).json({
+            message: "Media data is not found by this id"
+          });
+        } else {
+          return null;
+        }
+      }
+      res.download(mediaUrl);
+    } catch (err) {
+      console.log('download product image file error', err);
     }
   }
 

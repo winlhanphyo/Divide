@@ -55,7 +55,7 @@ const OrderDetailPage = () => {
                           Account Name:
                         </div>
                         <div class="col-sm-8">
-                          {`${orderDetail?.customer?.firstName} ${orderDetail?.customer?.lastName}`}
+                          {`${orderDetail?.customerData?.firstName} ${orderDetail?.customerData?.lastName}`}
                         </div>
                       </div>
 
@@ -160,27 +160,17 @@ const OrderDetailPage = () => {
                           }
                           <div className={`row ${styles.orderDetailRow}`}>
                             <div class="col-md-3">
-                              <img className={styles.orderImg} src={imageURL + dist?.product.image} />
+                              <img className={styles.orderImg} src={imageURL + dist?.mediaData?.cover} />
                             </div>
                             <div className={`col-md-9 ${styles.orderDetailInfo}`}>
                               <div className={`container ${styles.orderDetailInfoContainer}`}>
 
                                 <div className={`row ${styles.orderDetailItem}`}>
                                   <div className="col-md-6">
-                                    Product Name
+                                    Media Name
                                   </div>
                                   <div className="col-md-6">
-                                    {dist?.product?.name}
-                                  </div>
-                                </div>
-
-
-                                <div className={`row ${styles.orderDetailItem}`}>
-                                  <div className="col-md-6">
-                                    Qty
-                                  </div>
-                                  <div className="col-md-6">
-                                    {dist?.qty}
+                                    {dist?.mediaData?.name}
                                   </div>
                                 </div>
 
@@ -189,7 +179,7 @@ const OrderDetailPage = () => {
                                     Amount
                                   </div>
                                   <div className="col-md-6">
-                                    {dist?.amount}
+                                   € {dist?.amount}
                                   </div>
                                 </div>
 
@@ -208,7 +198,7 @@ const OrderDetailPage = () => {
                         Total Amount:
                       </div>
                       <div className={styles.totalAmount}>
-                        {orderDetail?.totalAmount}
+                       € {orderDetail?.totalAmount}
                       </div>
                     </div>
 

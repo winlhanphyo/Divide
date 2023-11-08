@@ -161,7 +161,6 @@ const ProductPage = () => {
                               <th>Name</th>
                               <th>Category</th>
                               <th>Price</th>
-                              <th>Status</th>
                               <th>Created At</th>
                               <th>Updated At</th>
                               <th>Action</th>
@@ -175,7 +174,6 @@ const ProductPage = () => {
                                   <td style={{width: "20%"}}>{data?.name}</td>
                                   <td>{data?.category?.name}</td>
                                   <td>€{data?.price}</td>
-                                  <td>{data?.status}</td>
                                   <td>{moment(data.createdAt).format('YYYY-MM-DD')}</td>
                                   <td>{moment(data.updatedAt).format('YYYY-MM-DD')}</td>
                                   <td>

@@ -63,7 +63,7 @@ module.exports = {
         allowNull: false
       },
       orderDetailId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.JSON,
         allowNull: false,
         defaultValue: false
       },

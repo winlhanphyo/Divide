@@ -10,47 +10,9 @@ import axios from '../../axios/index';
 
 const HomePage = () => {
   Chart.register(CategoryScale);
-  const Data = [
-    {
-      id: 1,
-      year: 2016,
-      userGain: 80000,
-      userLost: 823
-    },
-    {
-      id: 2,
-      year: 2017,
-      userGain: 45677,
-      userLost: 345
-    },
-    {
-      id: 3,
-      year: 2018,
-      userGain: 78888,
-      userLost: 555
-    },
-    {
-      id: 4,
-      year: 2019,
-      userGain: 90000,
-      userLost: 4555
-    },
-    {
-      id: 5,
-      year: 2020,
-      userGain: 4300,
-      userLost: 234
-    },
-    {
-      id: 5,
-      year: 2023,
-      userGain: 4300,
-      userLost: 234
-    }
-  ];
   const [loading, setLoading] = React.useState(false);
   const [saleChartData, setSaleChartData] = React.useState({
-    labels: Data.map((data) => data.year), 
+    labels: [], 
     datasets: [
       {
         label: "Total Sale",
@@ -77,11 +39,11 @@ const HomePage = () => {
   });
 
   const [productChartData, setProductChartData] = React.useState({
-    labels: Data.map((data) => data.year), 
+    labels: [], 
     datasets: [
       {
         label: "Top Products",
-        data: Data.map((data) => data.userGain),
+        data: [],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -121,13 +83,12 @@ const HomePage = () => {
   }, []);
 
   const setUpChartData = (data) => {
-    const productName = data.graph.product.map((dist) => dist.product.name);
-    const qty = data.graph.product.map((dist) => dist.totalQuantity);
-    console.log('product', productName, qty);
+    const productName = data.graph.product.map((dist) => dist.mediaData.name);
+    const amount = data.graph.product.map((dist) => dist.totalAmountSold);
     let preProductChartData = productChartData;
     preProductChartData.labels = productName;
     const productDataSet = [{
-      data: [...qty]
+      data: [...amount]
     }];
     preProductChartData.datasets = [...productDataSet];
     setProductChartData({...preProductChartData});
@@ -416,8 +377,8 @@ const HomePage = () => {
                             <tr>
                               <th>Product Name</th>
                               <th>Category</th>
-                              <th>Selling Count</th>
-                              <th>Price</th>
+                              {/* <th>Selling Count</th> */}
+                              <th>Sale Amount</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -425,10 +386,10 @@ const HomePage = () => {
                               return (
                                 <>
                                   <tr>
-                                    <td>{data?.product?.name}</td>
-                                    <td>{data?.product?.category?.name}</td>
-                                    <td>{data?.totalQuantity}</td>
-                                    <td>${data?.product?.price}</td>
+                                    <td>{data?.mediaData?.name}</td>
+                                    <td>{data?.mediaData?.type}</td>
+                                    {/* <td>{data?.totalQuantity}</td> */}
+                                    <td>${data?.totalAmountSold}</td>
                                   </tr>
                                 </>
                               )

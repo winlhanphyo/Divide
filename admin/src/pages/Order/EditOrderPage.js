@@ -42,7 +42,7 @@ const EditOrderPage = () => {
       setFormData({
         customerFirstName: dist?.data?.data?.firstName,
         customerLastName: dist?.data?.data?.lastName,
-        accountName: dist?.data?.data?.customer?.firstName + " " + dist?.data?.data?.customer?.lastName,
+        accountName: dist?.data?.data?.customerData?.firstName + " " + dist?.data?.data?.customerData?.lastName,
         email: dist?.data?.data?.customer?.email,
         country: dist?.data?.data?.country,
         company: dist?.data?.data?.company,
@@ -108,7 +108,7 @@ const EditOrderPage = () => {
         payment: formData.payment,
         updated_user_id: user.id
       };
-      axios.post(`/v1/order/${id}`, data).then((dist) => {
+      axios.post(`/v1/order/update/${id}`, data).then((dist) => {
         setLoading(false);
         swal("Success", "Order is updated successfully", "success").then(() => {
           window.location.href = "/admin/order";

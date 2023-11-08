@@ -57,9 +57,8 @@ class OrderService {
         });
         mediaList.push({
           price_data: {
-            currency: "usd",
+            currency: "eur",
             product_data: {
-              id: media?.dataValues?.id,
               name: media?.dataValues?.name
             },
             unit_amount: dist?.amount * 100,
@@ -68,7 +67,8 @@ class OrderService {
         });
       }
 
-      this.checkOut(mediaList, req, orderDetailData, res);
+      const result = await this.checkOut(mediaList, req, orderDetailData, res);
+      return result;
     } catch (e: any) {
       console.log("-----Create Order API error----", e);
       return res.status(400).json({
@@ -77,21 +77,25 @@ class OrderService {
     }
   }
 
+  /**
+   * checkOut
+   * @param mediaList 
+   * @param req 
+   * @param orderDetailData 
+   * @param res 
+   * @returns 
+   */
   async checkOut(mediaList: any, req: any, orderDetailData: any, res: any) {
     try {
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
       const domainUrl = req?.body?.domainUrl;
       const result = await this.orderCreateData(req, orderDetailData);
 
-      console.log('result--------', result?.dataValues?.id.toString());
-      console.log('mediaList--------', mediaList[0].price_data.product_data);
-      console.log('mediaList--------', mediaList[1].price_data.product_data);
-      
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: mediaList,
         mode: "payment",
-        payment_intent_data:  {
+        payment_intent_data: {
           metadata: {
             orderId: result?.dataValues?.id.toString(),
           },
@@ -110,8 +114,8 @@ class OrderService {
         success_url: domainUrl + "/payment/success",
         cancel_url: domainUrl + "/payment/cancel",
       });
+
       return res.json({ id: session.id });
-  
     } catch (err: any) {
       console.log('Stripe API Error', err);
       throw err.toString();
@@ -124,7 +128,7 @@ class OrderService {
    * @param orderDetailData 
    * @returns 
    */
-  async orderCreateData (req: any, orderDetailData: any) {
+  async orderCreateData(req: any, orderDetailData: any) {
     // for (let i = 0; i < orderDetailData.length; i++) {
     //   const param = orderDetailData[i];
     //   const product = await ProductDbModel.findOne(
@@ -138,8 +142,8 @@ class OrderService {
     //     const response = await product.save();
     //   }
     // }
-  
-    const orderDetailIds = orderDetailData.map((data: any) => data.id);
+
+    const orderDetailIds = orderDetailData.map((data: any) => data?.dataValues?.id);
     const orderObj: any = {
       customer: req.headers['userid'],
       firstName: req.body.firstName,
@@ -153,7 +157,7 @@ class OrderService {
       phone: req.body.phone,
       status: req.body.status,
       totalAmount: req.body.totalAmount,
-      orderDetailIds: orderDetailIds
+      orderDetailId: JSON.stringify(orderDetailIds)
     } as any;
 
     const createOrder = await OrderDbModel.create({ ...orderObj, createdAt: new Date().toISOString() });
@@ -201,8 +205,7 @@ class OrderService {
         postalCode: req.body.postalCode,
         phone: req.body.phone,
         status: req.body.status,
-        totalAmount: req.body.totalAmount,
-        orderDetailId: 1
+        totalAmount: req.body.totalAmount
       } as any;
 
       orderObj.id = +req.params.id;
@@ -233,7 +236,14 @@ class OrderService {
       const orderData = await OrderDbModel.findOne({
         where: {
           id: order_id
-        }
+        },
+        include: [
+          {
+            model: UserDbModel,
+            foreignKey: "customer",
+            as: "customerData"
+          }
+        ]
       }) as any;
 
       if (!orderData) {
@@ -242,8 +252,36 @@ class OrderService {
         });
       }
 
-      if (res) {
+      const orderDetailId = orderData?.dataValues?.orderDetailId || [];
+      const orderDetail = await OrderDetailDbModel.findAll({
+        where: { id: orderDetailId },
+        include: [
+          {
+            model: MediaDbModel,
+            foreignKey: "id",
+            as: "mediaData"
+          }
+        ]
+      });
 
+      for (let i = 0; i < orderDetail.length; i++) {
+        let mediaList = orderDetail[i]?.dataValues;
+        if (mediaList?.mediaData?.dataValues?.type === "video") {
+          mediaList.mediaData.dataValues.cover = "upload/user/video/default.jpg";
+        } else if (mediaList?.mediaData?.dataValues?.type === "music") {
+          mediaList.mediaData.dataValues.cover = "upload/user/music/default.jpg";
+        } else if (mediaList?.mediaData?.dataValues?.type === "text") {
+          mediaList.mediaData.dataValues.cover = "upload/user/text/default.jpg";
+        } else if (mediaList?.mediaData?.dataValues?.type === "photo") {
+          mediaList.mediaData.dataValues.cover = mediaList?.mediaData?.dataValues.url;
+        }
+      }
+
+      if (orderDetail) {
+        orderData.dataValues.orderDetail = orderDetail;
+      }
+
+      if (res) {
         return res.json({
           data: orderData
         })
@@ -260,6 +298,70 @@ class OrderService {
       } else {
         return null;
       }
+    }
+  }
+
+  /**
+   * get user order data with userId.
+   * @param req 
+   * @param res 
+   */
+  async getUserOrder(orderAttributes?: Array<any>, otherFindOptions?: FindOptions, offset?: number, limit?: number, res?: any): Promise<any> {
+    try {
+      limit = limit && limit > 0 ? limit : undefined;
+      let orderList = await OrderDbModel.findAll({
+        ...otherFindOptions,
+        attributes: orderAttributes,
+        limit,
+        offset
+      });
+
+      const orderCount = await OrderDbModel.count();
+
+      for (let i = 0; i < orderList?.length; i++) {
+        let orderData = orderList[i];
+
+        const orderDetailId = orderData?.dataValues?.orderDetailId || [];
+        const orderDetail = await OrderDetailDbModel.findAll({
+          where: { id: orderDetailId },
+          include: [
+            {
+              model: MediaDbModel,
+              foreignKey: "id",
+              as: "mediaData"
+            }
+          ]
+        });
+
+        for (let i = 0; i < orderDetail.length; i++) {
+          let mediaList = orderDetail[i]?.dataValues;
+          if (mediaList?.mediaData?.dataValues?.type === "video") {
+            mediaList.mediaData.dataValues.cover = "upload/user/video/default.jpg";
+          } else if (mediaList?.mediaData?.dataValues?.type === "music") {
+            mediaList.mediaData.dataValues.cover = "upload/user/music/default.jpg";
+          } else if (mediaList?.mediaData?.dataValues?.type === "text") {
+            mediaList.mediaData.dataValues.cover = "upload/user/text/default.jpg";
+          } else if (mediaList?.mediaData?.dataValues?.type === "photo") {
+            mediaList.mediaData.dataValues.cover = mediaList?.mediaData?.dataValues.url;
+          }
+        }
+
+        if (orderDetail) {
+          orderData.dataValues.orderDetail = orderDetail;
+        }
+      }
+
+      return res.json({
+        count: orderCount,
+        data: orderList,
+        offset: offset
+      });
+
+    } catch (err: any) {
+      console.log("Get User Order API Error", err);
+      return res.status(400).json({
+        message: err.toString()
+      });
     }
   }
 
@@ -373,6 +475,44 @@ class OrderService {
     } catch (err: any) {
       console.log('Stripe API Error', err);
       throw err.toString();
+    }
+  }
+
+  /**
+   * success payment.
+   * @param orderId
+   * @returns 
+   */
+  async successPayment(orderId: any): Promise<any> {
+    try {
+      const order = await OrderDbModel.findOne(
+        {
+          where: {
+            id: orderId
+          }
+        });
+      if (!order) {
+        const error: any = new Error("Not Found!");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      const orderData = {
+        payment: true
+      } as any;
+
+      const updateOrder = await OrderDbModel.update(orderData, {
+        where: { id: orderId as number }
+      });
+
+      return {
+        message: "Order payment successful!"
+      };
+    } catch (err: any) {
+      console.log('success Payment function failed', err);
+      return {
+        message: "Payment API Error!" + err.toString(),
+      };
     }
   }
 

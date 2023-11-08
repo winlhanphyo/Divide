@@ -34,7 +34,7 @@ const OrderPage = () => {
     getOrderList();
   }, []);
 
-  const getOrderList = (offsetData = 0) => {
+  const getOrderList = async (offsetData = 0) => {
     offsetData = Number(query.get("page")) || 1;
     let searchNameData = query.get("searchName") || searchName.current.value;
     searchName.current.value = searchNameData;
@@ -46,6 +46,7 @@ const OrderPage = () => {
       params.name = searchNameData;
     }
     setLoading(true);
+
     axios.get("/v1/order", {
       params
     }).then((dist) => {

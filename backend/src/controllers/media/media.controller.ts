@@ -95,6 +95,17 @@ class MediaController {
   }
 
   /**
+   * donwload age.
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+  async downloadMedia(req: any, res: any) {
+    const data = mediaService.downloadMedia(req, res);
+    return data;
+  }
+
+  /**
    * change media with media id.
    * @param req 
    * @param res 
@@ -104,7 +115,7 @@ class MediaController {
     const data = mediaService.changeMedia(req, res);
     return data;
   }
-  
+
 }
 
 export const mediaController = new MediaController();

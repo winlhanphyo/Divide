@@ -60,7 +60,7 @@ const CreateProductPage = () => {
     };
 
     let preErrorForm = errorForm;
-    let validate =  true;
+    let validate = true;
     Object.keys(errorMsg).map((dist) => {
       if (dist === "media") {
         if (uploadedFiles.length <= 0) {
@@ -76,7 +76,7 @@ const CreateProductPage = () => {
         preErrorForm[dist] = null;
       }
     });
-    setErrorForm({...preErrorForm});
+    setErrorForm({ ...preErrorForm });
     return validate;
   }
 
@@ -102,24 +102,24 @@ const CreateProductPage = () => {
       }
 
       axios.post("/v1/product", formParam,
-      {
-        headers: {'Content-Type': 'multipart/form-data'}
-      }).then((dist) => {
+        {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((dist) => {
           console.log("Created Product", dist);
           setLoading(false);
           swal("Success", "Product is created successfully", "success").then(() => {
-          window.location.href = "/admin/product";
-        });
-      }).catch((err) => {
-        swal("Oops!", err.toString(), "error");
-        setLoading(false);
-      })
+            window.location.href = "/admin/product";
+          });
+        }).catch((err) => {
+          swal("Oops!", err.toString(), "error");
+          setLoading(false);
+        })
     }
   }
 
   const cancelClick = (e) => {
     e.preventDefault();
-    window.location.href="/admin/product";
+    window.location.href = "/admin/product";
   }
 
   /**
@@ -134,8 +134,18 @@ const CreateProductPage = () => {
     setFormData({ ...preFormData });
     if (preFormData[name] && preErrorForm[name]) {
       preErrorForm[name] = null;
-      setErrorForm({...preErrorForm});
+      setErrorForm({ ...preErrorForm });
     }
+  };
+
+  /**
+   * handle remove file.
+   * @param {*} index 
+   */
+  const handleRemoveFile = (index) => {
+    const preUploadedFiles = [...uploadedFiles];
+    preUploadedFiles.splice(index, 1);
+    setUploadedFiles(preUploadedFiles);
   };
 
   /**
@@ -183,7 +193,7 @@ const CreateProductPage = () => {
       <Header />
       {loading && <LoadingSpinner />}
       <div class="page-body-wrapper">
-      <Sidebar />
+        <Sidebar />
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="row">
@@ -194,7 +204,7 @@ const CreateProductPage = () => {
                     <form class="forms-sample">
                       <div class="form-group">
                         <label for="name">Product Name</label>
-                        <input type="text" name="name" className={errorForm?.name ? `form-control is-invalid` : `form-control`} value={formData.name} onChange={handleChange} id="name" placeholder="product name"/>
+                        <input type="text" name="name" className={errorForm?.name ? `form-control is-invalid` : `form-control`} value={formData.name} onChange={handleChange} id="name" placeholder="product name" />
                         {errorForm.name ? (
                           <div class="invalid-feedback">{errorForm.name}</div>) : ''}
                       </div>
@@ -213,11 +223,12 @@ const CreateProductPage = () => {
                           {categoryList.map((data) => {
                             return (
                               <>
-                              {
-                                <option value={data.id}>{data.name}</option>
-                              }
+                                {
+                                  <option value={data.id}>{data.name}</option>
+                                }
                               </>
-                            )})}
+                            )
+                          })}
                         </select>
                         {errorForm.category ? (
                           <div class="invalid-feedback">{errorForm.category}</div>) : ''}
@@ -226,8 +237,8 @@ const CreateProductPage = () => {
                       <div class="form-group">
                         <label for="price">Price</label>
                         <div class="input-group">
-                            <span class="input-group-text">€</span>
-                            <input type="number" name="price" className={errorForm?.price ? `form-control is-invalid` : `form-control`} value={formData.price} onChange={handleChange} id="price" placeholder="Enter the amount" />
+                          <span class="input-group-text">€</span>
+                          <input type="number" name="price" className={errorForm?.price ? `form-control is-invalid` : `form-control`} value={formData.price} onChange={handleChange} id="price" placeholder="Enter the amount" />
                         </div>
                         {errorForm.price ? (
                           <div class="invalid-feedback">{errorForm.price}</div>) : ''}
@@ -236,7 +247,7 @@ const CreateProductPage = () => {
                       <div class="form-group">
                         <label for="quote">Quote</label>
                         <input type="text" name="quote" className={errorForm?.quote ? `form-control is-invalid` : `form-control`} value={formData.quote} onChange={handleChange} id="quote"
-                        placeholder="quis nostrud exerci tation ullamcorper suscipit lob- ortis nisl ut aliquip ex ea commodo consequat. Duis" />
+                          placeholder="quis nostrud exerci tation ullamcorper suscipit lob- ortis nisl ut aliquip ex ea commodo consequat. Duis" />
                         {errorForm.quote ? (
                           <div class="invalid-feedback">{errorForm.quote}</div>) : ''}
                       </div>
@@ -263,9 +274,10 @@ const CreateProductPage = () => {
                             <div class="invalid-feedback">{errorForm.media}</div>) : ''}
                         </div>
                         <div className="uploaded-files-list">
-                          {uploadedFiles.map(file => (
-                            <div>
+                          {uploadedFiles.map((file, index) => (
+                            <div className="uploaded-files">
                               {file.name}
+                              <i className="fa fa-times file-icon" onClick={() => handleRemoveFile(index)} aria-hidden="true"></i>
                             </div>
                           ))}
                         </div>
