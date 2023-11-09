@@ -11,6 +11,7 @@ import { config } from './config';
 import { router } from './routes';
 import authRouter from './routes/auth/auth.router';
 import { MUSIC_PATH, PHOTO_PATH, TEXT_PATH, USER_PROFILE_PATH, USER_THUMBNAIL_PATH, USER_VIDEO_PATH, VIDEO_PATH } from './utils/constant';
+import videoStreamRouter from './routes/videoStream/videoStream.router';
 // import { userService } from './services/user';
 // const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -55,39 +56,38 @@ const fileStorage = multer.diskStorage({
  */
 const fileFilter = async (_req: any, file: any, cb: any) => {
   const files: any = _req.files;
-  console.log('files--------------------------------', files);
   // if (_req.isAuthenticated()) {
-    if (files?.video) {
-      if (
-        file.mimetype === "video/mp4" ||
-        file.mimetype === "video/mpeg" ||
-        file.mimetype === "video/quicktime"
-      ) {
-        const fileData: any = _req.files;
-        // Define the maximum allowed video length in bytes (adjust as needed)
-        const maxVideoLength = 60 * 1000 * 1000; // 60 seconds in milliseconds (adjust as needed)
-        if (fileData.size > maxVideoLength) {
-          // File size exceeds the allowed limit
-          return cb(new Error('Video length exceeds the allowed limit.'), false);
-        } else {
-          cb(null, true); // Video is valid in terms of type and length
-        }
+  if (files?.video) {
+    if (
+      file.mimetype === "video/mp4" ||
+      file.mimetype === "video/mpeg" ||
+      file.mimetype === "video/quicktime"
+    ) {
+      const fileData: any = _req.files;
+      // Define the maximum allowed video length in bytes (adjust as needed)
+      const maxVideoLength = 60 * 1000 * 1000; // 60 seconds in milliseconds (adjust as needed)
+      if (fileData.size > maxVideoLength) {
+        // File size exceeds the allowed limit
+        return cb(new Error('Video length exceeds the allowed limit.'), false);
       } else {
-        return cb(new Error('Invalid file type. Only video files are allowed.'), false);
+        cb(null, true); // Video is valid in terms of type and length
       }
-    } else if (files?.image || files?.thumbnail) {
-      if (
-        file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg" ||
-        file.mimetype === "image/jpeg"
-      ) {
-        cb(null, true);
-      } else {
-        return cb(new Error('Invalid file type. Only image files are allowed.'), false);
-      }
-    } else if (files?.media) {
-      cb(null, true);
+    } else {
+      return cb(new Error('Invalid file type. Only video files are allowed.'), false);
     }
+  } else if (files?.image || files?.thumbnail) {
+    if (
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      return cb(new Error('Invalid file type. Only image files are allowed.'), false);
+    }
+  } else if (files?.media) {
+    cb(null, true);
+  }
 }
 
 export default class Server {
@@ -123,8 +123,8 @@ export default class Server {
         multer({ storage: fileStorage, fileFilter }).fields([
           { name: 'video', maxCount: 1 },
           { name: 'image', maxCount: 1 },
-          { name: 'thumbnail', maxCount: 20 },
-          { name: 'media', maxCount: 20 }
+          { name: 'thumbnail', maxCount: 50 },
+          { name: 'media', maxCount: 50 }
         ])
           (req, res, (err) => {
             if (err) {
@@ -142,6 +142,7 @@ export default class Server {
     this.app.use("/upload", express.static("upload"));
 
     this.app.use('/api', authRouter);
+    this.app.use('/api/video', videoStreamRouter);
     // this.app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
     // this.app.use(passport.authenticate('jwt', { session: true }), router);
     this.app.use(router);
@@ -156,19 +157,16 @@ export default class Server {
     /**
      * stripe payment webhook.
      */
-    this.app.post('/webhook', express.json({type: 'application/json'}), (request: any, response: any) => {
+    this.app.post('/webhook', express.json({ type: 'application/json' }), (request: any, response: any) => {
       const event = request.body;
-    
+
       // Handle the event
       switch (event.type) {
         case 'payment_intent.succeeded':
           const paymentIntent = event.data.object;
-          console.log('object', event.data.object);
-          console.log('metadata', event.data.object.metadata);
           const orderId = event.data.object.metadata.orderId;
-          console.log('orderId');
           orderController.successPayment(orderId);
-  
+
           // Then define and call a method to handle the successful payment intent.
           // handlePaymentIntentSucceeded(paymentIntent);
           break;
@@ -181,9 +179,9 @@ export default class Server {
         default:
           console.log(`Unhandled event type ${event.type}`);
       }
-    
+
       // Return a response to acknowledge receipt of the event
-      response.json({received: true});
+      response.json({ received: true });
     });
 
     // this.app.get('/api/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));

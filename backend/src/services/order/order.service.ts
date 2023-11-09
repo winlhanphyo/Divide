@@ -498,7 +498,7 @@ class OrderService {
       }
 
       const orderData = {
-        payment: true
+        paymentDone: true
       } as any;
 
       const updateOrder = await OrderDbModel.update(orderData, {

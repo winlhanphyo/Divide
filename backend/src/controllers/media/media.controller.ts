@@ -1,6 +1,7 @@
 import { Response, Request } from 'express';
 import autobind from 'autobind-decorator';
 import { mediaService } from '../../services/media';
+import { videoStreamService } from '../../services/videoStream';
 import { PAGINATION_LIMIT } from '../../utils/constant';
 import { Op } from 'sequelize';
 
@@ -95,7 +96,7 @@ class MediaController {
   }
 
   /**
-   * donwload age.
+   * donwload media.
    * @param req 
    * @param res 
    * @returns 
@@ -104,6 +105,17 @@ class MediaController {
     const data = mediaService.downloadMedia(req, res);
     return data;
   }
+
+  /**
+   * stream video file.
+   * @param req 
+   * @param res 
+   * @returns 
+   */
+    async streamMedia(req: any, res: any) {
+      const data = await videoStreamService.streamVideo(req, res);
+      return data;
+    }
 
   /**
    * change media with media id.

@@ -168,10 +168,12 @@ const CreateProductPage = () => {
           alert(`You can only add a maximum of ${MAX_COUNT} files`);
           setFileLimit(false);
           limitExceeded = true;
+          console.log('limit exceeded');
           return true;
         }
       }
     })
+    console.log('uploaded files', limitExceeded, uploaded);
     if (!limitExceeded) setUploadedFiles(uploaded);
   }
 
@@ -180,10 +182,8 @@ const CreateProductPage = () => {
       console.log('file limit exceeded');
       return "disabled custom-file-input";
     } else if (errorForm?.media) {
-      console.log('--------media------------');
       return "custom-file-input is-invalid";
     } else {
-      console.log('-----------custom file input----------');
       return "custom-file-input";
     }
   }
@@ -265,10 +265,15 @@ const CreateProductPage = () => {
                         </select>
                       </div>
 
+                      <input webkitdirectory mozdirectory type="file" id="media" onChange={handleFileSelected} className={getDisabledFile()} />
+
                       <div class="form-group">
                         <label for="media">Media</label>
                         <div class="custom-file">
-                          <input type="file" multiple name="media" className={getDisabledFile()} id="media" onChange={handleFileSelected} required />
+                          {/* <input type="file" webkitdirectory mozdirectory name="media" className={getDisabledFile()} id="media" onChange={handleFileSelected} required />
+                          <input webkitdirectory mozdirectory type="file" id="media" onChange={handleFileSelected} className={getDisabledFile()} /> */}
+
+                          <input type="file" name="media" className={getDisabledFile()} id="media" onChange={handleFileSelected} required multiple="" directory="" webkitdirectory="" mozdirectory="" />
                           <label class="custom-file-label" for="validatedCustomFile">{"Choose file..."}</label>
                           {errorForm.media ? (
                             <div class="invalid-feedback">{errorForm.media}</div>) : ''}

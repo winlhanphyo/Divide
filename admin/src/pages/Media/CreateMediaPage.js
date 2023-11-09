@@ -237,7 +237,8 @@ const CreateMediaPage = () => {
                       <div class="form-group">
                         <label for="media">Media</label>
                         <div class="custom-file">
-                          <input type="file" multiple name="media" className={getDisabledFile()} id="media" onChange={handleFileSelected} required />
+                          <input type="file" name="media" className={getDisabledFile()} id="media" onChange={handleFileSelected}
+                            required multiple="" directory="" webkitdirectory="" mozdirectory="" />
                           <label class="custom-file-label" for="validatedCustomFile">{"Choose file..."}</label>
                           {errorForm.media ? (
                             <div class="invalid-feedback">{errorForm.media}</div>) : ''}
