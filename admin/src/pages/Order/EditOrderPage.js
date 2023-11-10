@@ -32,7 +32,7 @@ const EditOrderPage = () => {
     postalCode: "",
     phone: "",
     status: "",
-    payment: "false"
+    paymentDone: "false"
   });
 
   React.useEffect(() => {
@@ -52,7 +52,7 @@ const EditOrderPage = () => {
         postalCode: dist?.data?.data?.postalCode,
         phone: dist?.data?.data?.phone,
         status: dist?.data?.data?.status,
-        payment: dist?.data?.data?.payment
+        paymentDone: dist?.data?.data?.paymentDone
       });
       setLoading(false);
     }).catch((err) => {
@@ -105,7 +105,7 @@ const EditOrderPage = () => {
         postalCode: formData.postalCode,
         phone: formData.phone,
         status: formData.status,
-        payment: formData.payment,
+        paymentDone: formData.paymentDone,
         updated_user_id: user.id
       };
       axios.post(`/v1/order/update/${id}`, data).then((dist) => {
@@ -236,8 +236,8 @@ const EditOrderPage = () => {
                       </div>
 
                       <div class="form-group">
-                        <label for="payment">Payment</label>
-                        <select className={`custom-select`} id="payment" name="payment" value={formData.payment} onChange={handleChange}>
+                        <label for="paymentDone">Payment</label>
+                        <select className={`custom-select`} id="paymentDone" name="paymentDone" value={formData.paymentDone} onChange={handleChange}>
                           <option value="true">Done</option>
                           <option value="false">Not Paid</option>
                         </select>

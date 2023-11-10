@@ -172,7 +172,7 @@ const OrderPage = () => {
                                   <td>{data?.city}</td>
                                   <td>{data?.phone}</td>
                                   <td>{data?.status}</td>
-                                  <td>{data?.payment === true ? 'done' : 'not paid'}</td>
+                                  <td>{data?.paymentDone === true ? 'done' : 'not paid'}</td>
                                   <td>{moment(data.createdAt).format('YYYY-MM-DD')}</td>
                                   <td>{moment(data.updatedAt).format('YYYY-MM-DD')}</td>
                                   <td>

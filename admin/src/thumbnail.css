@@ -1,0 +1,35 @@
+.react-thumbnail-generator {
+  height: 300px !important;
+}
+
+.react-thumbnail-generator img {
+  margin: 40px 35px !important;
+}
+
+.media-controller .react-thumbnail-generator, .order-detail-container .react-thumbnail-generator {
+  width: 100px;
+  height: 100px !important;
+}
+
+.media-controller .react-thumbnail-generator img {
+  margin: 26px 5px !important;
+  height: 140px;
+  width: 260px;
+  border-radius: 0%;
+}
+
+.order-detail-container .react-thumbnail-generator img {
+  margin: 26px 70px !important;
+  height: 140px;
+  width: 260px;
+  border-radius: 0%;
+}
+
+.how-itemcart1 .react-thumbnail-generator {
+  height: auto !important;
+}
+
+.how-itemcart1 .react-thumbnail-generator img {
+  margin: 175px 35px 0 0!important;
+  width: 370px!important;
+}

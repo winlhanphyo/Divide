@@ -1,0 +1,16 @@
+.media-controller .react-pdf__Page__canvas, .order-detail-container .react-pdf__Page__canvas {
+  width: 90px !important;
+  height: 90px !important;
+  margin: 20px auto;
+}
+
+.how-itemcart1 .react-pdf__Page__canvas {
+  width: 100% !important;
+  height: 100px !important;
+  margin: 20px auto;
+}
+
+.checkout-cart .react-pdf__Page__canvas {
+  width: 95% !important;
+  height: 90px !important;
+}

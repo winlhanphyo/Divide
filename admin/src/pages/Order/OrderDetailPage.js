@@ -1,12 +1,16 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import swal from 'sweetalert';
+import { Document, Page, pdfjs } from 'react-pdf';
+import VideoThumbnail from 'react-video-thumbnail';
 import { imageURL } from '../../utils/constants/constant';
 import Header from "../../components/Header/Header";
 import Sidebar from "../../components/Header/Sidebar";
 import axios from '../../axios/index';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import styles from "./Order.module.scss";
+import '../../pdf.css';
+import '../../thumbnail.css';
 
 const OrderDetailPage = () => {
   const param = useParams();
@@ -145,13 +149,13 @@ const OrderDetailPage = () => {
                           Payment:
                         </div>
                         <div class="col-sm-8">
-                          {orderDetail?.payment ? "done" : "not paid" }
+                          {orderDetail?.paymentDone ? "done" : "not paid" }
                         </div>
                       </div>
 
                     </div>
 
-                    <div className={`container ${styles.orderDetailContainer}`}>
+                    <div className={`container order-detail-container ${styles.orderDetailContainer}`}>
 
                       {orderDetail?.orderDetail?.map((dist, index) => {
                         return (<>
@@ -160,7 +164,31 @@ const OrderDetailPage = () => {
                           }
                           <div className={`row ${styles.orderDetailRow}`}>
                             <div class="col-md-3">
-                              <img className={styles.orderImg} src={imageURL + dist?.mediaData?.cover} />
+
+                              { dist?.mediaData?.type === "text" ?
+                                      (
+                                        <Document
+                                          file={imageURL +  dist?.mediaData?.url}>
+                                          <Page pageNumber={1} />
+                                        </Document>
+                                      )
+                                      :
+                                      dist?.mediaData?.type === "video" ?
+                                      (
+                                        <VideoThumbnail
+                                          videoUrl={imageURL +  dist?.mediaData?.url}
+                                          // thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                                          width={200}
+                                          height={200}
+                                        />
+                                      )
+                                      :
+                                      (
+                                        <>
+                                          <img className={styles.orderImg} src={imageURL + dist?.mediaData?.cover} />
+                                        </>
+                                      )
+                                    }
                             </div>
                             <div className={`col-md-9 ${styles.orderDetailInfo}`}>
                               <div className={`container ${styles.orderDetailInfoContainer}`}>

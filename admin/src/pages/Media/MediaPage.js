@@ -2,6 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import swal from 'sweetalert';
 import { useLocation } from 'react-router-dom';
+import { Document, Page, pdfjs } from 'react-pdf';
+import VideoThumbnail from 'react-video-thumbnail';
 import $ from 'jquery';
 import Header from "../../components/Header/Header";
 import Sidebar from "../../components/Header/Sidebar";
@@ -13,11 +15,17 @@ import axios from '../../axios/index';
 import { imageURL } from '../../utils/constants/constant';
 import styles from './MediaPage.module.scss';
 
+import '../../pdf.css';
+import '../../thumbnail.css';
+
 
 function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
+
+// Set the worker URL to the PDF.js worker script
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const MediaPage = () => {
   let query = useQuery();
@@ -165,7 +173,7 @@ const MediaPage = () => {
 
   return (
     <>
-      <div class="container-scroller">
+      <div class="container-scroller media-controller">
         <Header />
         {loading && <LoadingSpinner />}
         {/* <!-- partial --> */}
@@ -223,7 +231,32 @@ const MediaPage = () => {
                                   <td>{data?.name} &nbsp;&nbsp;<i className={`mdi mdi-pencil ${styles.mediaEdit}`} onClick={() => handleEdit(data)}></i></td>
                                   <td>{data?.products?.length > 0 && data?.products[0]?.name}</td>
                                   <td>{data?.type}</td>
-                                  <td><img onClick={() => showImageModal(imageURL + data.cover)} src={imageURL + data.cover} /></td>
+                                  <td>
+                                    {data?.type === "text" ?
+                                      (
+                                        <Document
+                                          file={imageURL + data?.url}>
+                                          <Page pageNumber={1} />
+                                        </Document>
+                                      )
+                                      :
+                                      data?.type === "video" ?
+                                      (
+                                        <VideoThumbnail
+                                          videoUrl={imageURL + data?.url}
+                                          // thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                                          width={200}
+                                          height={200}
+                                        />
+                                      )
+                                      :
+                                      (
+                                        <>
+                                          <img onClick={() => showImageModal(imageURL + data.cover)} src={imageURL + data?.cover} onContextMenu={(e) => e.preventDefault()} className={"card-img-top " + styles.productImg} alt="..." />
+                                        </>
+                                      )
+                                    }
+                                  </td>
                                   <td>
                                     <>
                                       <div class="form-check form-switch">
