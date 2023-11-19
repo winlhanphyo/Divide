@@ -3,7 +3,7 @@ import axios from "axios";
 const getUser = () => {
   const user = JSON.parse(localStorage.getItem("admin"));
   
-  const res = { 
+  const res = {
     token: null,
     id: null
   };
